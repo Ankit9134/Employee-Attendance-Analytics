@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.docx
+sample_data/
+sample_seed.py
+openapi.yaml
+statement.md
