@@ -23,7 +23,7 @@ from pymongo.errors import DuplicateKeyError
 
 load_dotenv()
 
-client = MongoClient(os.getenv("MONGO_URI", "mongodb://localhost:27017"))
+client = MongoClient(os.getenv("MONGO_URI", "mongodb://localhost:27017"), tlsAllowInvalidCertificates=True)
 db = client[os.getenv("MONGO_DB", "attendance_db")]
 
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -293,6 +293,29 @@ class RegularizeIn(BaseModel):
 # --------------------------------------------------------------------------- #
 #  Endpoints provided
 # --------------------------------------------------------------------------- #
+@app.get("/")
+def start():
+    return {
+        "name": "Employee Attendance & Analytics API",
+        "version": "2.0.0",
+        "docs": "/docs",
+        "health": "/health",
+        "endpoints": [
+            "POST /employees",
+            "GET  /employees",
+            "POST /attendance/punch-in",
+            "POST /attendance/punch-out",
+            "GET  /attendance",
+            "PATCH /attendance/{emp_code}/{date}",
+            "GET  /analytics/employees/{emp_code}/monthly",
+            "GET  /analytics/departments/summary",
+            "GET  /analytics/leaderboard/late",
+            "GET  /analytics/departments/{department}/trend",
+            "GET  /admin/explain/{endpoint}",
+        ],
+    }
+
+
 @app.get("/health")
 def health():
     try:
